@@ -27,10 +27,13 @@ app.get("/api/pdf-text", async (req, res) => {
         });
         const pdfData = new Uint8Array(response.data);
         
-        // Extract text from PDF
-        const data = await pdfParse(pdfData);
+        // Extract text from PDF with page limitation
+        const options = {
+            max: 50 // Limit to first 50 pages
+        };
+        const data = await pdfParse(pdfData, options);
         const extractedText = data.text || "";
-    
+        
         // Send extracted text as response
         res.json({ text: extractedText.trim() });
         
