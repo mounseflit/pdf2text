@@ -167,15 +167,15 @@ app.get("/", (_, res) => {
                     <h3>Extract text from specific pages:</h3>
                     <code>GET /api/pdf-text?pdfUrl=[URL]&min=[START_PAGE]&max=[END_PAGE]</code>
                     <p>Example: <a href="/api/pdf-text?pdfUrl=https://example.com/file.pdf&min=1&max=5">/api/pdf-text?pdfUrl=https://example.com/file.pdf&min=1&max=5</a></p>
-                    <p><b>Note 1 :<b> If min equals max, the API will extract text from that specific page.</p>
-                    <p><b>Note 2 :<b> The Number of requested pages should not ssurpass 150~200 pages! (max - min <= 200).</p>
+                    <p><b>Note 1 :</b> If min equals max, the API will extract text from that specific page.</p>
+                    <p><b>Note 2 :</b> The Number of requested pages should not ssurpass 150~200 pages! (max - min <= 200).</p>
                 </div>
 
                 <div class="endpoint">
                     <h3>Extract text from entire PDF:</h3>
                     <code>GET /api/pdf-text-all?pdfUrl=[URL]</code>
                     <p>Example: <a href="/api/pdf-text-all?pdfUrl=https://example.com/file.pdf">/api/pdf-text-all?pdfUrl=https://example.com/file.pdf</a></p>
-                    <p><b>Note 1 :<b> The Pdf file should not surpass 150~200 pages! (it will only extract the content of the first 200 pages).</p>
+                    <p><b>Note 1 :</b> The Pdf file should not surpass 150~200 pages! (it will only extract the content of the first 200 pages).</p>
                 </div>
 
                 <p>Created by @Mounseflit</p>
