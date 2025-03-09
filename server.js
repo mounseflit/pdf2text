@@ -13,7 +13,7 @@
  * 
  * @example
  * // Extract text from specific pages:
- * GET /api/pdf-text?pdfUrl=<url>&min=1&max=50
+ * GET /api/pdf-text?pdfUrl=<url>&min=1&max=200
  * 
  * // Extract text from entire PDF:
  * GET /api/pdf-text-all?pdfUrl=<url>
@@ -54,15 +54,19 @@ app.get("/api/pdf-text", async (req, res) => {
         const pdfData = new Uint8Array(response.data);
 
 
-        const max = parseInt(req.query.max) || 100; // Default to 100 if not provided
+        const max = parseInt(req.query.max) || 150; // Default to 150 if not provided
         const min = parseInt(req.query.min) || 1;  // Default to 1 if not provided
 
         // Validate the values
-        if (isNaN(max) || max < 1) {
+        if (isNaN(max) || max < 1 ) {
             throw new Error('Invalid max page value');
         }
-        if (isNaN(min) || min < 1 || min > max) {
+        if (isNaN(min) || min < 1 || min > max ) {
             throw new Error('Invalid min page value');
+        }
+
+        if ((max - min) > 200 ) {
+            throw new Error('The range of files is too large (it surpass 200 page)');
         }
 
         // Replace the options and pdfParse section with this:
@@ -115,9 +119,13 @@ app.get("/api/pdf-text-all", async (req, res) => {
         });
 
         const pdfData = new Uint8Array(response.data); 
+        
+        const options = {
+            max: 200,
+        };
 
         // Extract text from whole PDF 
-        const data = await pdfParse(pdfData);
+        const data = await pdfParse(pdfData, options);
         const extractedText = data.text || "";
 
         // Send extracted text as response
@@ -159,13 +167,15 @@ app.get("/", (_, res) => {
                     <h3>Extract text from specific pages:</h3>
                     <code>GET /api/pdf-text?pdfUrl=[URL]&min=[START_PAGE]&max=[END_PAGE]</code>
                     <p>Example: <a href="/api/pdf-text?pdfUrl=https://example.com/file.pdf&min=1&max=5">/api/pdf-text?pdfUrl=https://example.com/file.pdf&min=1&max=5</a></p>
-                    <p>Note: If min equals max, the API will extract text from that specific page.</p>
+                    <p><b>Note 1 :<b> If min equals max, the API will extract text from that specific page.</p>
+                    <p><b>Note 2 :<b> The Number of requested pages should not ssurpass 150~200 pages! (max - min <= 200).</p>
                 </div>
 
                 <div class="endpoint">
                     <h3>Extract text from entire PDF:</h3>
                     <code>GET /api/pdf-text-all?pdfUrl=[URL]</code>
                     <p>Example: <a href="/api/pdf-text-all?pdfUrl=https://example.com/file.pdf">/api/pdf-text-all?pdfUrl=https://example.com/file.pdf</a></p>
+                    <p><b>Note 1 :<b> The Pdf file should not surpass 150~200 pages! (it will only extract the content of the first 200 pages).</p>
                 </div>
 
                 <p>Created by @Mounseflit</p>
