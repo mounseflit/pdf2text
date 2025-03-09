@@ -54,7 +54,7 @@ app.get("/api/pdf-text", async (req, res) => {
         const pdfData = new Uint8Array(response.data);
 
 
-        const max = parseInt(req.query.max) || 50; // Default to 50 if not provided
+        const max = parseInt(req.query.max) || 100; // Default to 100 if not provided
         const min = parseInt(req.query.min) || 1;  // Default to 1 if not provided
 
         // Validate the values
