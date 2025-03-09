@@ -51,7 +51,7 @@ app.get("/api/health", (_, res) => {
 
 // Default route
 app.get("/", (_, res) => {
-    res.send("PDF Processor API");
+    res.send("PDF Processor API by @Mounseflit");
 });
 
 // Export for Vercel serverless function
