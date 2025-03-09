@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pdf2text</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            max-height: 300px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>pdf2text</h1>
+    <form id="form">
+        <label for="url">Enter PDF URL:</label>
+        <input type="text" id="url" name="url" placeholder="https://example.com/document.pdf" required>
+        <button type="submit">Extract</button>
+    </form>
+
+    <h2>Extracted text:</h2>
+    <pre id="extracted-text">Extracted content will appear here...</pre>
+
+    <script>
+        document.getElementById('form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const pdfUrl = document.getElementById('url').value;
+            const outputElement = document.getElementById('extracted-text');
+            
+            outputElement.textContent = 'Loading...';
+            
+            try {
+                const apiUrl = `https://pdf2text-umber.vercel.app/api/pdf-text?pdfUrl=${encodeURIComponent(pdfUrl)}`;
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.text) {
+                    outputElement.textContent = data.text;
+                } else {
+                    outputElement.textContent = 'No text extracted or invalid response.';
+                }
+            } catch (error) {
+                outputElement.textContent = `Error: ${error.message}`;
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
